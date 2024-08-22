@@ -13,8 +13,13 @@ The File Access Information Tool is a Python utility that retrieves and displays
 - Python 3.x  
 - `pywin32` library (for Windows API access)  
 
-## Installation  
-1. **Clone the Repository**:  
+## Installation
+1. **Clone the Repository For HTTPS**:  
    ```bash  
-   git clone https://github.com/yourusername/file-access-info-tool.git  
-   cd file-access-info-tool
+   git clone https://github.com/mahdikhoshdel/windows-file-access.git 
+   cd windows-file-access
+
+## Start
+1. **Just Run With Pytohn3.x**:  
+   ```bash
+   python3 file_access_info.py
