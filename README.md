@@ -1,5 +1,3 @@
----
-
 # File Access Info
 
 **File Access Info** is a Python script designed to retrieve and display file access information, such as last access time and file ownership details, on both Linux and Windows systems. The script utilizes OS-specific modules to gather this information, making it versatile and suitable for cross-platform environments.
@@ -121,13 +119,5 @@ Contributions are welcome! Please follow these steps:
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
----
 
-### Notes:
 
-- Replace `https://github.com/yourusername/file-access-info.git` with the actual URL of your repository.
-- The README assumes you have a script called `file_access_info.py` as the main entry point and that your Linux-specific logic is in `linux.py`, while Windows logic is in `windows.py`.
-- Modify the sections as per your actual project setup and folder structure.
-- Make sure to update the `LICENSE` file if you are using a different license.
-
-This README will provide users with a clear understanding of your project's purpose, setup instructions, and usage examples, making it easier for them to get started and contribute.
