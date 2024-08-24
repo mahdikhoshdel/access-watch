@@ -1,5 +1,3 @@
-Certainly! A good README file is essential for any project as it provides an overview of the project, guides users on how to set it up, run, and contribute. Here’s a suitable README for your project based on the Python script you've shared:
-
 ---
 
 # File Access Info
