@@ -1,6 +1,6 @@
-# File Access Info
+# Access Watch
 
-**File Access Info** is a Python script designed to retrieve and display file access information, such as last access time and file ownership details, on both Linux and Windows systems. The script utilizes OS-specific modules to gather this information, making it versatile and suitable for cross-platform environments.
+**Access Watch** is a Python script designed to retrieve and display file access information, such as last access time and file ownership details, on both Linux and Windows systems. The script utilizes OS-specific modules to gather this information, making it versatile and suitable for cross-platform environments.
 
 ## Table of Contents
 
@@ -31,8 +31,8 @@
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/mahdikhoshdel/file-access-info.git
-   cd file-access-info
+   git clone https://github.com/mahdikhoshdel/access-watch.git
+   cd access-watch
    ```
 
 2. **Install Required Packages:**
@@ -77,11 +77,12 @@
 ## Project Structure
 
 ```
-file-access-info/
+access-watch/
 ├── README.md
-├── main.py
-├── linux.py
-└── windows.py
+└── source/
+   ├── main.py
+   ├── linux.py
+   └── windows.py
 ```
 
 - `main.py`: Main script to run the project.
@@ -93,16 +94,26 @@ file-access-info/
 To check the access information of a file on a Linux system:
 
 ```bash
-python file_access_info.py /home/user/sample.txt
+python main.py /home/user/sample.txt
+python main.py /home/user/sample/directory/
 ```
 
-Output:
+Output in Linux:
 
 ```
 Last Access Time: Wed Aug 23 13:00:00 2023
 File Owner UID: 1000 (Username: user)
 File Owner GID: 1000 (Group Name: usergroup)
 ```
+
+Output in Windows:
+
+```
+Last access time : Sun Aug 25 11:13:30 2024
+Last access SID : SID
+ID/UserName (Account Type: account-type)
+```
+
 
 ## Contributing
 
