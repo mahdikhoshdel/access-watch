@@ -98,21 +98,7 @@ python main.py /home/user/sample.txt
 python main.py /home/user/sample/directory/
 ```
 
-Output in Linux:
 
-```
-Last Access Time: Wed Aug 23 13:00:00 2023
-File Owner UID: 1000 (Username: user)
-File Owner GID: 1000 (Group Name: usergroup)
-```
-
-Output in Windows:
-
-```
-Last access time : Sun Aug 25 11:13:30 2024
-Last access SID : SID
-ID/UserName (Account Type: account-type)
-```
 
 
 ## Contributing
