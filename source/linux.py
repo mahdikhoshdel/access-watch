@@ -5,32 +5,21 @@ import time
 
 
 class LinuxAccessWatch:
-    def __init__(self, file_path):
+    def __init__(self, file_path: str):
         self.file_path = file_path
-        self.last_access_time = None
-        self.owner_uid = None
-        self.owner_gid = None
+        self.get_file_stats()
 
     def get_file_stats(self):
-        """Get last access time and file owner UID and GID."""
+        """Set last access time and file owner UID and GID."""
         try:
             stat_info = os.stat(self.file_path)
             self.last_access_time = stat_info.st_atime
             self.owner_uid = stat_info.st_uid
             self.owner_gid = stat_info.st_gid
         except FileNotFoundError:
-            print("File not found.")
-            return False
+            raise FileNotFoundError("File not found.")
         except Exception as e:
-            print(f"An error occurred: {e}")
-            return False
-        return True
-
-    def get_last_access_time(self):
-        """Return last access time in a human-readable format."""
-        if self.last_access_time is not None:
-            return time.ctime(self.last_access_time)
-        return None
+            raise Exception(f"An error occurred: {e}")
 
     def get_owner_uid(self):
         """Return the owner UID."""
@@ -44,35 +33,32 @@ class LinuxAccessWatch:
             return self.owner_gid
         return None
 
-    def uid_to_username(self, uid):
+    def uid_to_username(self):
         """Convert UID to username."""
         try:
+            uid = self.get_owner_uid()
             user_info = pwd.getpwuid(uid)
             return user_info.pw_name
-        except KeyError:
-            return f"UID {uid} not found"
+        except KeyError as error:
+            raise KeyError(f"UID {self.owner_uid} not found :{error}")
 
-    def gid_to_groupname(self, gid):
+    def gid_to_groupname(self):
         """Convert GID to group name."""
         try:
+            gid = self.get_owner_gid()
             group_info = grp.getgrgid(gid)
             return group_info.gr_name
-        except KeyError:
-            return f"GID {gid} not found"
+        except KeyError as error:
+            raise KeyError(f"GID {self.owner_gid} not found :{error}")
+
+    def get_last_access_time(self):
+        """Return last access time in a human-readable format."""
+        if self.last_access_time is not None:
+            return time.ctime(self.last_access_time)
+        return None
+
+    def get_username(self):
+        return self.uid_to_username()
     
-    def review(self):
-        
-        if self.get_file_stats():
-            last_access_time = self.get_last_access_time()
-            owner_uid = self.get_owner_uid()
-            owner_gid = self.get_owner_gid()
-
-            print(f"Last Access Time: {last_access_time}")
-
-            if owner_uid is not None:
-                username = self.uid_to_username(owner_uid)
-                print(f"File Owner UID: {owner_uid} (Username: {username})")
-
-            if owner_gid is not None:
-                groupname = self.gid_to_groupname(owner_gid)
-                print(f"File Owner GID: {owner_gid} (Group Name: {groupname})")
+    def get_groupname(self):
+        return self.gid_to_groupname()
