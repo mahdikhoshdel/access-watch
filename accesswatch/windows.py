@@ -11,7 +11,8 @@ that was used for the most recent access to a file or directory.
 """
 import os  
 import win32security  
-import time  
+import time
+from typing import Optional, Tuple
 
 
 class WindowsAccessWatch:
@@ -37,90 +38,85 @@ class WindowsAccessWatch:
         - sid_to_username_info(sid): Converts a given SID to a username, domain name, and account type.  
         - access_info(): Retrieves the account name, domain name, and account type for the file owner.  
     """ 
-    def __init__(self, file_path):  
-        self.file_path = file_path  
-        self.last_access_time = None  
+    def __init__(self, file_path: str) -> None:  
+        self.file_path: str = file_path  
+        self.last_access_time: Optional[float] = None  
+        self.owner_sid: Optional[str] = None  
         self.set_owner_sid()  
-       
-    def set_owner_sid(self):
-        """Just get and set owner sid that accessed to that specific file or directory"""
-        self.owner_sid = win32security.GetFileSecurity(  
-                self.file_path,   
-                win32security.OWNER_SECURITY_INFORMATION  
-            ).GetSecurityDescriptorOwner()
 
-    def get_file_stats(self):  
+    def set_owner_sid(self) -> None:  
+        """Just get and set owner SID that accessed that specific file or directory."""  
+        self.owner_sid = win32security.GetFileSecurity(  
+            self.file_path,   
+            win32security.OWNER_SECURITY_INFORMATION  
+        ).GetSecurityDescriptorOwner()  
+
+    def get_file_stats(self) -> bool:  
         """Get last access time and file owner SID."""  
         try:  
             stat_info = os.stat(self.file_path)  
             self.last_access_time = stat_info.st_atime  
-              
         except FileNotFoundError:  
-            return False 
+            return False   
         except Exception as e:  
             print(f"An error occurred: {e}")  
             return False  
         return True  
 
-    def get_last_access_time(self):  
-        """
-        Return last access time in a human-readable format
-        Args:
-            None
+    def get_last_access_time(self) -> str:  
+        """  
+        Return last access time in a human-readable format.  
+        
+        Args:  
+            None  
 
-        Returns:
-            str: time
-                example: Thu Sep  5 15:18:36 2024
+        Returns:  
+            str: time  
+                 example: Thu Sep  5 15:18:36 2024  
         """  
         if not self.last_access_time:  
-            self.get_file_stats()
-            return time.ctime(self.last_access_time)
-        raise FileNotFoundError 
+            self.get_file_stats()  
+            return time.ctime(self.last_access_time)  
+        raise FileNotFoundError("Last access time could not be retrieved.")   
 
-    def get_owner_sid(self):  
+    def get_owner_sid(self) -> Optional[str]:  
         """Return the owner SID."""  
-        if self.owner_sid is not None: 
-            return self.owner_sid 
-        return None
+        return self.owner_sid if self.owner_sid is not None else None  
     
-    def get_owner_sid_string(self):  
-        """Return the owner SID as a string in human readable format."""  
-        if self.owner_sid is not None: 
+    def get_owner_sid_string(self) -> Optional[str]:  
+        """Return the owner SID as a string in human-readable format."""  
+        if self.owner_sid is not None:   
             return win32security.ConvertSidToStringSid(self.owner_sid)  
-        return None
+        return None  
 
-    def sid_to_username_info(self, sid):  
-        """
-        Convert SID to username
+    def sid_to_username_info(self, sid: str) -> Tuple[str, str, str]:  
+        """  
+        Use access_user_info() to have user info without set SID  
+        Convert SID to username.  
 
-        Args:
-            SID (str): A Security Identifier.
+        Args:  
+            sid (str): The SID to convert.  
 
-        Returns:
-            tuple: (
-                Account Name (str),
-                Domain Name (str),
-                Account Type (str)
-                )
+        Returns:  
+            tuple: (Account Name (str), Domain Name (str), Account Type (str))  
         """  
         try:  
             account_name, domain_name, account_type = win32security.LookupAccountSid(None, sid)  
-            return account_name, domain_name, account_type 
+            return account_name, domain_name, account_type   
         except Exception as error:  
-            raise RuntimeError(error)
+            raise RuntimeError(f"Error retrieving user info from SID: {error}")  
         
-    def access_info(self):
-        """
-        Convert SID to username
+    def user_access_info(self) -> Tuple[str, str, str]:  
+        """  
+        Convert SID to username.  
 
-        Args:
-            None
-        Returns:
-            tuple: (
-                Account Name (str),
-                Domain Name (str),
-                Account Type (str)
-                )
-        """
-        sid = self.get_owner_sid()
-        return self.sid_to_username_info(sid)
+        Args:  
+            None  
+        
+        Returns:  
+            tuple: (Account Name (str), Domain Name (str), Account Type (str))  
+        """  
+        sid = self.get_owner_sid()  
+        if sid is not None:  
+            return self.sid_to_username_info(sid)  
+        raise ValueError("Owner SID is None; cannot retrieve user access information.")  
