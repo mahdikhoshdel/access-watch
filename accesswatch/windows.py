@@ -36,7 +36,7 @@ class WindowsAccessWatch:
         - get_owner_sid(): Returns the owner SID of the file.  
         - get_owner_sid_string(): Returns the owner SID as a string in a human-readable format.  
         - sid_to_username_info(sid): Converts a given SID to a username, domain name, and account type.  
-        - access_info(): Retrieves the account name, domain name, and account type for the file owner.  
+        - user_access_info(): Retrieves the account name, domain name, and account type for the file owner.  
     """ 
     def __init__(self, file_path: str) -> None:  
         self.file_path: str = file_path  
@@ -46,10 +46,13 @@ class WindowsAccessWatch:
 
     def set_owner_sid(self) -> None:  
         """Just get and set owner SID that accessed that specific file or directory."""  
-        self.owner_sid = win32security.GetFileSecurity(  
-            self.file_path,   
-            win32security.OWNER_SECURITY_INFORMATION  
-        ).GetSecurityDescriptorOwner()  
+        try:
+            self.owner_sid = win32security.GetFileSecurity(
+                self.file_path,
+                win32security.OWNER_SECURITY_INFORMATION
+            ).GetSecurityDescriptorOwner()  
+        except:
+            raise FileNotFoundError("Invalid file path")
 
     def get_file_stats(self) -> bool:  
         """Get last access time and file owner SID."""  
@@ -76,8 +79,7 @@ class WindowsAccessWatch:
         """  
         if not self.last_access_time:  
             self.get_file_stats()  
-            return time.ctime(self.last_access_time)  
-        raise FileNotFoundError("Last access time could not be retrieved.")   
+        return time.ctime(self.last_access_time)
 
     def get_owner_sid(self) -> Optional[str]:  
         """Return the owner SID."""  
