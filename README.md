@@ -5,11 +5,10 @@
 ## Table of Contents
 
 1. [Features](#features)
-2. [Linux](#LinuxAccessWatch)
-5. [Project Structure](#project-structure)
-6. [Examples](#examples)
-7. [Contributing](#contributing)
-8. [License](#license)
+2. [Linux](#linuxaccesswatch)
+3. [Windows](#windowsaccesswatch)
+4. [Contributing](#contributing)
+5. [License](#license)
 
 ## Features
 
