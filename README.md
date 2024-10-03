@@ -5,9 +5,7 @@
 ## Table of Contents
 
 1. [Features](#features)
-2. [Requirements](#requirements)
-3. [Installation](#installation)
-4. [Usage](#usage)
+2. [Linux](#LinuxAccessWatch)
 5. [Project Structure](#project-structure)
 6. [Examples](#examples)
 7. [Contributing](#contributing)
@@ -16,109 +14,74 @@
 ## Features
 
 - Retrieve and display the last access time of a file.
-- Display the file owner's user ID (UID) and group ID (GID).
-- Convert UID to username and GID to group name (Linux only).
+- Display the file owner's user ID and group ID
+- Convert user ID to username and group ID to group name.
 - Cross-platform support: Works on both Linux and Windows.
 
-## Requirements
 
-- Python 3.x
-- Linux: `pwd` and `grp` modules (standard in Python on Unix-like systems)
-- Windows: `pywin32` package for Windows-specific functionalities (only if using the Windows module)
+## LinuxAccessWatch  
 
-## Installation
+The `LinuxAccessWatch` class is designed to monitor and retrieve file information related to user access in a Linux environment. It provides methods to obtain metadata such as the last access time, owner UID, owner GID, owner username, and owner group name of a specified file or directory.  
 
-1. **Clone the Repository:**
+#### Methods  
 
-   ```bash
-   git clone https://github.com/mahdikhoshdel/access-watch.git
-   cd access-watch
-   ```
+- **`get_file_stats() -> None`**: Gathers file statistics including last access time, owner UID, and owner GID.  
+- **`get_owner_uid() -> Optional[int]`**: Retrieves the user ID (UID) of the file owner.  
+- **`get_owner_gid() -> Optional[int]`**: Retrieves the group ID (GID) of the file owner.  
+- **`uid_to_username() -> str`**: Converts the owner UID to a human-readable username.  
+- **`gid_to_groupname() -> str`**: Converts the owner GID to a human-readable group name.  
+- **`get_last_access_time() -> Optional[str]`**: Returns the last access time of the file in a human-readable format.
+- **`get_username() -> str`**: Retrieves the username of the file owner.  
+- **`get_groupname() -> str`**: Retrieves the group name of the file owner.  
+ 
 
-2. **Install Required Packages:**
+#### Usage  
 
-   - For Linux: No additional installation is required.
-   - For Windows (if you plan to test on Windows):
-
-     ```bash
-     pip install pywin32
-     ```
-
-## Usage
-
-1. **Run the Script:**
-
-   Use the following command to run the script, specifying the file path you want to check:
-
-   ```bash
-   python file_access_info.py /path/to/your/file
-   ```
-
-2. **Command-Line Argument:**
-
-   The script accepts a file path as a command-line argument:
-
-   ```bash
-   python file_access_info.py /path/to/your/file
-   ```
-
-   Example for Linux:
-
-   ```bash
-   python file_access_info.py /home/user/documents/example.txt
-   ```
-
-   Example for Windows:
-
-   ```bash
-   python file_access_info.py C:\Users\User\Documents\example.txt
-   ```
-
-## Project Structure
-
-```
-access-watch/
-├── README.md
-└── source/
-   ├── main.py
-   ├── linux.py
-   └── windows.py
+```python  
+access_watch = LinuxAccessWatch("/path/to/file_or/directory")
+last_access_time = access_watch.get_last_access_time()
+# Sat Sep 21 10:48:05 2024
+owner_uid = access_watch.get_owner_uid()
+# id
+owner_gid = access_watch.get_owner_gid()
+# id
+username = access_watch.get_username()
+# username
+groupname = access_watch.get_groupname()
+# usergroup
 ```
 
-- `main.py`: Main script to run the project.
-- `linux.py`: Module containing Linux-specific file access logic.
-- `windows.py`: Module containing Windows-specific file access logic.
+## WindowsAccessWatch
+`WindowsAccessWatch` is a class designed to monitor and retrieve information about file access on Windows systems. It tracks the last access time of a file, retrieves the owner Security Identifier (SID), and converts this SID into a human-readable account name, domain name, and account type.
 
-## Examples
 
-To check the access information of a file on a Linux system:
+#### Methods
+- **`__init__(file_path)`**: Initializes the `WindowsAccessWatch` object with the file path and retrieves the owner SID.
+- **`set_owner_sid()`**: Sets the owner SID for the specified file or directory.
+- **`get_file_stats()`**: Retrieves the last access time and owner SID of the file.
+- **`get_last_access_time()`**: Returns the last access time in a human-readable format.
+- **`get_owner_sid()`**: Returns the owner SID of the file.
+- **`get_owner_sid_string()`**: Returns the owner SID as a string in a human-readable format.
+- **`sid_to_username_info(sid)`**: Converts a given SID to a username, domain name, and account type.
+- **`user_access_info()`**: Retrieves the account name, domain name, and account type for the file owner.
 
-```bash
-python main.py /home/user/sample.txt
-python main.py /home/user/sample/directory/
-```
+#### Usage
 
-Output in Linux:
-
-```
-Last Access Time: Wed Aug 23 13:00:00 2023
-File Owner UID: 1000 (Username: user)
-File Owner GID: 1000 (Group Name: usergroup)
-```
-
-Output in Windows:
-
-```
-Last access time : Sun Aug 25 11:13:30 2024
-Last access SID : SID
-ID/UserName (Account Type: account-type)
+```python
+access_watcher = WindowsAccessWatch("/path/to/file_or/directory")  
+last_access_time = access_watcher.get_last_access_time()        
+owner_sid = access_watcher.get_owner_sid_string()
+account_name, domain_name, account_type = access_watcher.user_access_info() 
 ```
 
 
 ## Contributing
 
-Contributions are welcome! Please follow these steps:
+Contributions are welcome!
 
+Github:  https://github.com/mahdikhoshdel/accesswatch.git
+
+Please follow these steps:
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature-branch`).
 3. Make your changes.
@@ -128,7 +91,7 @@ Contributions are welcome! Please follow these steps:
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+This project is licensed under the MIT License.
 
 
 
