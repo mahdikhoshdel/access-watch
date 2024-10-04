@@ -1,17 +1,18 @@
 # Access Watch
+![Python](https://img.shields.io/badge/Python-3.6%2B-blue) ![License](https://img.shields.io/badge/License-MIT-yellow) ![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Windows-brightgreen)
 
 **Access Watch** is a Python script designed to retrieve and display file access information, such as last access time and file ownership details, on both Linux and Windows systems. The script utilizes OS-specific modules to gather this information, making it versatile and suitable for cross-platform environments.
 
 
-## Features
+## 🚀 Features
 
-- Retrieve and display the last access time of a file.
-- Display the file owner's user ID and group ID
-- Convert user ID to username and group ID to group name.
-- Cross-platform support: Works on both Linux and Windows.
+- 🔍 Retrieve and display the last access time of a file.
+- 👤 Display the file owner's user ID and group ID
+- 🔄 Convert user ID to username and group ID to group name.
+- 🖥️ Cross-platform support: Works on both Linux and Windows.
 
 
-## LinuxAccessWatch  
+## 🐧 LinuxAccessWatch  
 
 The `LinuxAccessWatch` class is designed to monitor and retrieve file information related to user access in a Linux environment. It provides methods to obtain metadata such as the last access time, owner UID, owner GID, owner username, and owner group name of a specified file or directory.  
 
@@ -45,7 +46,7 @@ groupname = access_watch.get_groupname()
 # usergroup
 ```
 
-## WindowsAccessWatch
+## 🪟 WindowsAccessWatch
 `WindowsAccessWatch` is a class designed to monitor and retrieve information about file access on Windows systems. It tracks the last access time of a file, retrieves the owner Security Identifier (SID), and converts this SID into a human-readable account name, domain name, and account type.
 
 
@@ -71,7 +72,7 @@ account_name, domain_name, account_type = access_watcher.user_access_info()
 ```
 
 
-## Contributing
+## 🤝 Contributing
 
 Contributions are welcome!
 
