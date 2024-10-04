@@ -2,13 +2,6 @@
 
 **Access Watch** is a Python script designed to retrieve and display file access information, such as last access time and file ownership details, on both Linux and Windows systems. The script utilizes OS-specific modules to gather this information, making it versatile and suitable for cross-platform environments.
 
-## Table of Contents
-
-1. [Features](#features)
-2. [Linux](#linuxaccesswatch)
-3. [Windows](#windowsaccesswatch)
-4. [Contributing](#contributing)
-5. [License](#license)
 
 ## Features
 
@@ -36,7 +29,9 @@ The `LinuxAccessWatch` class is designed to monitor and retrieve file informatio
 
 #### Usage  
 
-```python  
+```python
+from accesswatch.linux import LinuxAccessWatch
+
 access_watch = LinuxAccessWatch("/path/to/file_or/directory")
 last_access_time = access_watch.get_last_access_time()
 # Sat Sep 21 10:48:05 2024
@@ -67,7 +62,9 @@ groupname = access_watch.get_groupname()
 #### Usage
 
 ```python
-access_watcher = WindowsAccessWatch("/path/to/file_or/directory")  
+from accesswatch.windows import WindowsAccessWatch
+
+access_watcher = WindowsAccessWatch("/path/to/file_or/directory")
 last_access_time = access_watcher.get_last_access_time()        
 owner_sid = access_watcher.get_owner_sid_string()
 account_name, domain_name, account_type = access_watcher.user_access_info() 
