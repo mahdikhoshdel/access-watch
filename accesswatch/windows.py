@@ -30,21 +30,21 @@ class WindowsAccessWatch:
 
     Methods:  
         - __init__(file_path): Initializes the WindowsAccessWatch object with the file path and retrieves the owner SID.  
-        - set_owner_sid(): Sets the owner SID for the specified file or directory.  
-        - get_file_stats(): Retrieves the last access time and owner SID of the file.  
-        - get_last_access_time(): Returns the last access time in a human-readable format.  
-        - get_owner_sid(): Returns the owner SID of the file.  
-        - get_owner_sid_string(): Returns the owner SID as a string in a human-readable format.  
-        - sid_to_username_info(sid): Converts a given SID to a username, domain name, and account type.  
+        - _set_owner_sid(): Sets the owner SID for the specified file or directory.  
+        - _get_file_stats(): Retrieves the last access time and owner SID of the file.  
+        - last_access_time(): Returns the last access time in a human-readable format.  
+        - _get_owner_sid(): Returns the owner SID of the file.  
+        - owner_id(): Returns the owner SID as a string in a human-readable format.  
+        - _sid_to_username_info(sid): Converts a given SID to a username, domain name, and account type.  
         - user_access_info(): Retrieves the account name, domain name, and account type for the file owner.  
     """ 
     def __init__(self, file_path: str) -> None:  
         self.file_path: str = file_path  
         self.last_access_time: Optional[float] = None  
         self.owner_sid: Optional[str] = None  
-        self.set_owner_sid()  
+        self._set_owner_sid()  
 
-    def set_owner_sid(self) -> None:  
+    def _set_owner_sid(self) -> None:  
         """Just get and set owner SID that accessed that specific file or directory."""  
         try:
             self.owner_sid = win32security.GetFileSecurity(
@@ -54,7 +54,7 @@ class WindowsAccessWatch:
         except:
             raise FileNotFoundError("Invalid file path")
 
-    def get_file_stats(self) -> bool:  
+    def _get_file_stats(self) -> bool:  
         """Get last access time and file owner SID."""  
         try:  
             stat_info = os.stat(self.file_path)  
@@ -66,7 +66,7 @@ class WindowsAccessWatch:
             return False  
         return True  
 
-    def get_last_access_time(self) -> str:  
+    def last_access_time(self) -> str:  
         """  
         Return last access time in a human-readable format.  
         
@@ -78,20 +78,20 @@ class WindowsAccessWatch:
                  example: Thu Sep  5 15:18:36 2024  
         """  
         if not self.last_access_time:  
-            self.get_file_stats()  
+            self._get_file_stats()  
         return time.ctime(self.last_access_time)
 
-    def get_owner_sid(self) -> Optional[str]:  
+    def _get_owner_sid(self) -> Optional[str]:  
         """Return the owner SID."""  
         return self.owner_sid if self.owner_sid is not None else None  
     
-    def get_owner_sid_string(self) -> Optional[str]:  
+    def owner_sid(self) -> Optional[str]:  
         """Return the owner SID as a string in human-readable format."""  
         if self.owner_sid is not None:   
             return win32security.ConvertSidToStringSid(self.owner_sid)  
         return None  
 
-    def sid_to_username_info(self, sid: str) -> Tuple[str, str, str]:  
+    def _sid_to_username_info(self, sid: str) -> Tuple[str, str, str]:  
         """  
         Use access_user_info() to have user info without set SID  
         Convert SID to username.  
@@ -116,9 +116,12 @@ class WindowsAccessWatch:
             None  
         
         Returns:  
-            tuple: (Account Name (str), Domain Name (str), Account Type (str))  
+            tuple: (Account Name (str), Domain Name (str), Account Type (str))
+        
+        (Account Type == 1) : Admin Group
+        (Account Type == 2) : Standard Group(limited)
         """  
-        sid = self.get_owner_sid()  
+        sid = self._get_owner_sid()  
         if sid is not None:  
-            return self.sid_to_username_info(sid)  
+            return self._sid_to_username_info(sid)  
         raise ValueError("Owner SID is None; cannot retrieve user access information.")  
